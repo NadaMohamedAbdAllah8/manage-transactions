@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Category extends Authenticatable
+class TransactionStatus extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -20,11 +20,6 @@ class Category extends Authenticatable
     protected $fillable = [
         'name'
     ];
-
-    public function subCategories()
-    {
-        return $this->hasMany(SubCategory::class);
-    }
 
     public function transaction()
     {

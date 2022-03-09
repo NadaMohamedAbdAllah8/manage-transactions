@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Category extends Authenticatable
+class Transaction extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -18,16 +18,28 @@ class Category extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name'
+        'category_id',
+        'sub_category_id',
+        'amount',
+        'customer_id',
+        'due_date',
+        'VAT',
+        'is_VAT_inclusive',
+        'status_id'
     ];
 
     public function subCategories()
     {
-        return $this->hasMany(SubCategory::class);
+        return $this->belongsTo(SubCategory::class);
     }
 
-    public function transaction()
+    public function category()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->belongsTo(Category::class);
+    }
+
+    public function transactionStatus()
+    {
+        return $this->belongsTo(TransactionStatus::class);
     }
 }
