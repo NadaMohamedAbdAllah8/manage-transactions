@@ -28,7 +28,6 @@ class TransactionController extends Controller
 
         ], [
             'required' => 'The :attribute field is required.',
-            'unique' => 'The :attribute field has to be unique.',
             'category_id.exists' => 'The :attribute field has to be a valid category id.',
             'sub_category_id.exists' =>
             'The :attribute field has to be a valid subcategory id, and belongs to the right category.',
