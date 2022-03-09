@@ -13,7 +13,7 @@ class CreatePaymentTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('transaction_id');
@@ -25,9 +25,8 @@ class CreatePaymentTable extends Migration
 
             $table->text('details')->nullable(TRUE);
 
-            $table->unsignedBigInteger('method_id');
+            $table->unsignedBigInteger('method_id')->nullable(TRUE);
             $table->foreign('method_id')->references('id')->on('payment_methods');
-
 
             $table->timestamps();
         });
