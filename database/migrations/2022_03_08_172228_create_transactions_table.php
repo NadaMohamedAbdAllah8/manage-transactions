@@ -29,7 +29,7 @@ class CreateTransactionsTable extends Migration
 
             $table->timestamp('due_date');
 
-            $table->string('VAT');
+            $table->integer('VAT');
 
             $table->boolean('is_VAT_inclusive');
 
