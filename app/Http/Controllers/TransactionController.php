@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,10 +18,20 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:categories,name'
+            'category_id' => 'required|exists:categories,id',
+            'sub_category_id' => 'exists:sub_categories,id,category_id,' . $request->get('category_id'),
+            'amount' => 'required',
+            'customer_id' => 'required|exists:customers,id',
+            'due_date' => 'required',
+            'VAT' => 'required',
+            'is_VAT_inclusive' => 'required',
+
         ], [
             'required' => 'The :attribute field is required.',
             'unique' => 'The :attribute field has to be unique.',
+            'category_id.exists' => 'The :attribute field has to be a valid category id.',
+            'sub_category_id.exists' =>
+            'The :attribute field has to be a valid subcategory id, and belongs to the right category.',
         ]);
 
         if ($validator->fails()) {
@@ -30,11 +41,20 @@ class TransactionController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => "Validation Error",
-                "title" => $errors // or $errors
+                "title" => $errors
             ]);
         }
 
-        return Transaction::create($request->all());
+        // 'status_id'
+        try {
+            return Transaction::create($request->all());
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Validation Error",
+                "title" => $e->getMessage()
+            ]);
+        }
     }
 
     /**
