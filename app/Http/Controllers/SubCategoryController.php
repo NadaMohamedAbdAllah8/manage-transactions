@@ -43,7 +43,7 @@ class SubCategoryController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => "Validation Error",
-                "title" => $errors // or $errors
+                "title" => $errors
             ]);
         }
 
