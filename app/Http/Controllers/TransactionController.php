@@ -81,4 +81,17 @@ class TransactionController extends Controller
             ]);
         }
     }
+
+    public function transaction_payments($id)
+    {
+        try {
+            return $this->transactionRepository->findPayments($id);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error",
+                "title" => $e->getMessage(),
+            ]);
+        }
+    }
 }

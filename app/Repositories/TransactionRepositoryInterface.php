@@ -10,4 +10,5 @@ interface TransactionRepositoryInterface
 
     public function updateTransactionStatus($id);
 
+    public function findPayments($id);
 }

@@ -75,6 +75,18 @@ class TransactionRepository implements TransactionRepositoryInterface
             );
     }
 
+    public function findPayments($id)
+    {
+        $transaction = Transaction::where('id', $id)->first();
+
+        return $transaction->payment
+            ->map(
+                function ($payment) {
+                    return $this->formatPaymentResult($payment);
+                }
+            );
+    }
+
     protected function formatResult($transaction)
     {
         return [
@@ -86,6 +98,19 @@ class TransactionRepository implements TransactionRepositoryInterface
             'Status' => $transaction->transactionStatus->name,
             'Due date' => $transaction->due_date->diffForHumans(),
             'Due date timestamp' => $transaction->due_date,
+        ];
+    }
+
+    protected function formatPaymentResult($payment)
+    {
+        return [
+            'Id' => $payment->id,
+            'Transaction id' => $payment->transaction_id,
+            'Amount' => $payment->amount,
+            'Payment method' => ($payment->paymentMethod->name) ?? 'Method is not set',
+            'Paid at' => $payment->paid_on,
+            'Due date timestamp' => $payment->paid_on,
+            'Details' => $payment->details,
         ];
     }
 }

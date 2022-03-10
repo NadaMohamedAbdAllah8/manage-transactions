@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -22,7 +21,7 @@ class Payment extends Authenticatable
         'amount',
         'paid_on',
         'details',
-        'method_id'
+        'method_id',
     ];
 
     public function transaction()
@@ -32,6 +31,6 @@ class Payment extends Authenticatable
 
     public function paymentMethod()
     {
-        return $this->belongsTo(PaymentMethod::class);
+        return $this->belongsTo(PaymentMethod::class, 'method_id');
     }
 }
