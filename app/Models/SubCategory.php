@@ -27,7 +27,7 @@ class SubCategory extends Authenticatable
         return $this->belongsTo(Category::class);
     }
 
-    public function transaction()
+    public function transactions()
     {
         return $this->hasMany(Transaction::class);
     }

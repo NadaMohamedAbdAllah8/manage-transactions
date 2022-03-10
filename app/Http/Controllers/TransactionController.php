@@ -3,12 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Repositories\TransactionRepository;
+use App\Repositories\TransactionRepositoryInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
 {
+    private $transactionRepository;
+
+    public function __construct(TransactionRepositoryInterface $transactionRepository)
+    {
+        $this->transactionRepository = $transactionRepository;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -34,13 +43,13 @@ class TransactionController extends Controller
         ]);
 
         if ($validator->fails()) {
-            // get all errors 
+            // get all errors
             $errors = $validator->errors()->all();
 
             return response()->json([
                 "success" => false,
                 "message" => "Validation Error",
-                "title" => $errors
+                "title" => $errors,
             ]);
         }
 
@@ -51,7 +60,7 @@ class TransactionController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => "Validation Error",
-                "title" => $e->getMessage()
+                "title" => $e->getMessage(),
             ]);
         }
     }
@@ -64,6 +73,14 @@ class TransactionController extends Controller
      */
     public function show($id)
     {
-        return Transaction::find($id);
+        try {
+            return $this->transactionRepository->findById($id);
+        } catch (Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Validation Error",
+                "title" => $e->getMessage(),
+            ]);
+        }
     }
 }

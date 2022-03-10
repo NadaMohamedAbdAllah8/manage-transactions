@@ -28,7 +28,16 @@ class Transaction extends Authenticatable
         'status_id'
     ];
 
-    public function subCategories()
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'due_date' => 'datetime',
+    ];
+
+    public function subCategory()
     {
         return $this->belongsTo(SubCategory::class);
     }
@@ -40,7 +49,7 @@ class Transaction extends Authenticatable
 
     public function transactionStatus()
     {
-        return $this->belongsTo(TransactionStatus::class);
+        return $this->belongsTo(TransactionStatus::class, 'status_id');
     }
 
     public function payment()
