@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
 use App\Repositories\TransactionRepository;
 use App\Repositories\TransactionRepositoryInterface;
 use Exception;
@@ -53,9 +52,8 @@ class TransactionController extends Controller
             ]);
         }
 
-        // 'status_id'
         try {
-            return Transaction::create($request->all());
+            return $this->transactionRepository->create($request->all());
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
