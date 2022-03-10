@@ -57,7 +57,7 @@ class TransactionController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
-                "message" => "Validation Error",
+                "message" => "Error",
                 "title" => $e->getMessage(),
             ]);
         }
@@ -76,7 +76,7 @@ class TransactionController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
-                "message" => "Validation Error",
+                "message" => "Error",
                 "title" => $e->getMessage(),
             ]);
         }

@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payment;
+use App\Repositories\PaymentRepositoryInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
+    private $paymentRepository;
+
+    public function __construct(PaymentRepositoryInterface $paymentRepository)
+    {
+        $this->paymentRepository = $paymentRepository;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -21,7 +28,7 @@ class PaymentController extends Controller
             'transaction_id' => 'required|exists:transactions,id',
             'amount' => 'required',
             'paid_on' => 'required',
-            'method_id' => 'exists:payment_methods,id'
+            'method_id' => 'exists:payment_methods,id',
 
         ], [
             'required' => 'The :attribute field is required.',
@@ -30,23 +37,23 @@ class PaymentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            // get all errors 
+            // get all errors
             $errors = $validator->errors()->all();
 
             return response()->json([
                 "success" => false,
                 "message" => "Validation Error",
-                "title" => $errors
+                "title" => $errors,
             ]);
         }
 
         try {
-            return Payment::create($request->all());
+            return $this->paymentRepository->create($request->all());
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
-                "message" => "Validation Error",
-                "title" => $e->getMessage()
+                "message" => "Error",
+                "title" => $e->getMessage(),
             ]);
         }
     }

@@ -8,6 +8,10 @@ use Carbon\Carbon;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
+    const paid = 1;
+    const outstanding = 2;
+    const overdue = 3;
+
     public function create($data)
     {
         $status_id = $this->getTransactionStatus($data['due_date']);
@@ -19,12 +23,43 @@ class TransactionRepository implements TransactionRepositoryInterface
         return $transaction;
     }
 
+    public function updateTransactionStatus($transaction_id)
+    {
+        $transaction = Transaction::where('id', $transaction_id)->first();
+
+        // calcualte the actual due amount
+        $transactionDueAmount = $transaction->amount;
+
+        if (!$transaction->is_VAT_inclusive) {
+            $transactionDueAmount += $transaction->amount * ($transaction->VAT / 100);
+        }
+
+        // get transaction's payments
+        $transactionPaymentsTotalAmount = $transaction->payment->sum('amount');
+
+        if ($transactionPaymentsTotalAmount >= $transactionDueAmount) {
+            // the transaction is paid
+
+            $transaction->status_id = self::paid;
+
+            $transaction->update();
+
+            return;
+        } else {
+            $status_id = $this->getTransactionStatus($transaction->due_date);
+
+            $transaction->status_id = $status_id;
+
+            return;
+        }
+    }
+
     protected function getTransactionStatus($transactionDueDate)
     {
-        $status_id = 2;
+        $status_id = self::outstanding;
 
         if (Carbon::now() > Carbon::parse($transactionDueDate)) {
-            $status_id = 3;
+            $status_id = self::overdue;
         }
 
         return $status_id;
