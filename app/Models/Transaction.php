@@ -23,8 +23,8 @@ class Transaction extends Authenticatable
         'amount',
         'customer_id',
         'due_date',
-        'VAT',
-        'is_VAT_inclusive',
+        'VAT' //its value should be for example: 15, NOT 0.15
+        , 'is_VAT_inclusive',
         'status_id'
     ];
 
