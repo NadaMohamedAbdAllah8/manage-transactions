@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Repositories\TransactionRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,13 @@ use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
+    private $transactionRepository;
+
+    public function __construct(TransactionRepositoryInterface $transactionRepository)
+    {
+        $this->transactionRepository = $transactionRepository;
+    }
+
     public function register(Request $request)
     {
         $fields = $request->validate([
@@ -47,7 +55,7 @@ class CustomerController extends Controller
         // Check password
         if (!$customer || !Hash::check($fields['password'], $customer->password)) {
             return response([
-                'message' => 'Bad creds',
+                'message' => 'Bad credentials',
             ], 401);
         }
 
@@ -63,10 +71,16 @@ class CustomerController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::guard('admin')->user()->tokens()->delete();
+        Auth::guard('customer')->user()->tokens()->delete();
 
         return [
             'message' => 'Logged out',
         ];
     }
+
+    public function transactions()
+    { //return 'hi';
+        return $this->transactionRepository->findByCustomer(Auth::guard('customer')->user()->id);
+    }
+
 }

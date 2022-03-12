@@ -43,7 +43,7 @@ class Authenticate extends Middleware
             }
 
             if (reset($this->guards) === 'customer') {
-                return route('api/login-customer');
+                return route('login-customer');
             }
 
         }

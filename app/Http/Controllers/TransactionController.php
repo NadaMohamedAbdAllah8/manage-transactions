@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\TransactionRepository;
 use App\Repositories\TransactionRepositoryInterface;
 use Exception;
 use Illuminate\Http\Request;

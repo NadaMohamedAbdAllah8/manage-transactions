@@ -8,6 +8,8 @@ interface TransactionRepositoryInterface
 
     public function findById($id);
 
+    public function findByCustomer($customer_id);
+
     public function updateTransactionStatus($id);
 
     public function findPayments($id);

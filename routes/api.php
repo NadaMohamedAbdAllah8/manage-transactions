@@ -26,7 +26,7 @@ Route::post('/login-admin', [AdminController::class, 'login'])->name('login-admi
 
 Route::post('/register-customer', [CustomerController::class, 'register']);
 
-Route::post('/login-customer', [CustomerController::class, 'login']);
+Route::post('/login-customer', [CustomerController::class, 'login'])->name('login-customer');
 
 Route::get('/categories', [CategoryController::class, 'index']);
 
@@ -48,6 +48,12 @@ Route::group(['middleware' => ['auth:admin']], function () {
         [TransactionController::class, 'transaction_payments']);
 
     Route::post('/logout-admin', [AdminController::class, 'logout']);
+});
+
+Route::group(['middleware' => ['auth:customer']], function () {
+    Route::post('/transactions', [CustomerController::class, 'transactions']);
+
+    Route::post('/logout-customer', [CustomerController::class, 'logout']);
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

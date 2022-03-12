@@ -75,6 +75,17 @@ class TransactionRepository implements TransactionRepositoryInterface
             );
     }
 
+    public function findByCustomer($customer_id)
+    {
+        return Transaction::where('customer_id', $customer_id)->get()
+            ->map(
+                function ($transaction) {
+                    return $this->formatResult($transaction);
+                }
+            );
+
+    }
+
     public function findPayments($id)
     {
         $transaction = Transaction::where('id', $id)->first();
