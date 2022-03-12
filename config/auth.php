@@ -46,7 +46,7 @@ return [
         ],
         'customer' => [
             'driver' => 'sanctum',
-            'provider' => 'admins',
+            'provider' => 'customers',
         ],
     ],
 
