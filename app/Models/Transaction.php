@@ -53,7 +53,7 @@ class Transaction extends Authenticatable
 
     public function payment()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasMany(Payment::class, 'transaction_id', 'id');
     }
 
     public function customer()

@@ -13,4 +13,8 @@ interface TransactionRepositoryInterface
     public function updateTransactionStatus($id);
 
     public function findPayments($id);
+
+    public function whereBetweenDates($startingDate, $endingDate);
+
+    public function monthlyReport($startingDate, $endingDate);
 }

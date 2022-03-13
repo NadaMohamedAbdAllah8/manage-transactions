@@ -28,30 +28,36 @@ Route::post('/register-customer', [CustomerController::class, 'register']);
 
 Route::post('/login-customer', [CustomerController::class, 'login'])->name('login-customer');
 
-Route::get('/categories', [CategoryController::class, 'index']);
-
-Route::get('/subcategories', [SubCategoryController::class, 'index']);
-
-Route::get('/transaction/{id}', [TransactionController::class, 'show']);
-
 // Protected routes
 Route::group(['middleware' => ['auth:admin']], function () {
     Route::post('/category', [CategoryController::class, 'store']);
 
+    Route::get('/categories', [CategoryController::class, 'index']);
+
     Route::post('/subcategory', [SubCategoryController::class, 'store']);
+
+    Route::get('/subcategories', [SubCategoryController::class, 'index']);
 
     Route::post('/transaction', [TransactionController::class, 'store']);
 
+    Route::get('/transaction/{id}', [TransactionController::class, 'show']);
+
     Route::post('/payment', [PaymentController::class, 'store']);
 
-    Route::get('/transaction-payments/{id}',
-        [TransactionController::class, 'transaction_payments']);
+    Route::get('/transaction/payments/{id}',
+        [TransactionController::class, 'payments']);
+
+    Route::get('/transaction/range-report/{startingDate}/{endingDate}',
+        [TransactionController::class, 'rangeReport']);
+
+    Route::get('/transaction/monthly-report/{startingDate}/{endingDate}',
+        [TransactionController::class, 'monthlyReport']);
 
     Route::post('/logout-admin', [AdminController::class, 'logout']);
 });
 
 Route::group(['middleware' => ['auth:customer']], function () {
-    Route::post('/transactions', [CustomerController::class, 'transactions']);
+    Route::get('/transactions', [CustomerController::class, 'transactions']);
 
     Route::post('/logout-customer', [CustomerController::class, 'logout']);
 });

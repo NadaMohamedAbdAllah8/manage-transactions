@@ -26,7 +26,7 @@ class Payment extends Authenticatable
 
     public function transaction()
     {
-        return $this->belongsTo(Transaction::class);
+        return $this->belongsTo(Transaction::class, 'transaction_id');
     }
 
     public function paymentMethod()
