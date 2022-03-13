@@ -225,7 +225,6 @@ class TransactionRepository implements TransactionRepositoryInterface
             'Subcategory' => ($transaction->subCategory->name) ?? 'Does not have a sub category',
             'Amount' => $transaction->amount,
             'Status' => $transaction->transactionStatus->name,
-            'Due date' => $transaction->due_date->diffForHumans(),
             'Due date timestamp' => $transaction->due_date,
         ];
     }
