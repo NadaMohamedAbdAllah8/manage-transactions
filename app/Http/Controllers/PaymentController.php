@@ -27,13 +27,14 @@ class PaymentController extends Controller
         $validator = Validator::make($request->all(), [
             'transaction_id' => 'required|exists:transactions,id',
             'amount' => 'required',
-            'paid_on' => 'required',
+            'paid_on' => 'required|date_format:Y-m-d H:i:s',
             'method_id' => 'exists:payment_methods,id',
 
         ], [
             'required' => 'The :attribute field is required.',
             'transaction_id.exists' => 'The :attribute field has to be a valid transaction id.',
             'method_id.exists' => 'The :attribute field has to be a valid payment method.',
+            'paid_on.date_format' => 'Enter a valid time stamp in :attribute field',
         ]);
 
         if ($validator->fails()) {
