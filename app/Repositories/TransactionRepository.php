@@ -31,11 +31,7 @@ class TransactionRepository implements TransactionRepositoryInterface
         $transaction = Transaction::where('id', $transaction_id)->first();
 
         // calcualte the actual due amount
-        $transactionDueAmount = $transaction->amount;
-
-        if (!$transaction->is_VAT_inclusive) {
-            $transactionDueAmount += $transaction->amount * ($transaction->VAT / 100);
-        }
+        $transactionDueAmount = $this->transactionDueAmount($transaction);
 
         // get transaction's payments
         $transactionPaymentsTotalAmount = $transaction->payment->sum('amount');
@@ -76,11 +72,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->where('paid_on', '<', $endDate)->sum('amount');
 
         // calcualte the actual due amount
-        $transactionDueAmount = $transaction->amount;
-
-        if (!$transaction->is_VAT_inclusive) {
-            $transactionDueAmount += $transaction->amount * ($transaction->VAT / 100);
-        }
+        $transactionDueAmount = $this->transactionDueAmount($transaction);
 
         if ($transactionPaymentsTotalAmount >= $transactionDueAmount) {
             // the transaction is paid
@@ -142,18 +134,19 @@ class TransactionRepository implements TransactionRepositoryInterface
                 'outstanding' => $outstandingAmount,
                 'overdue' => $overdueAmount,
             ];
-
         }
 
         $transactionPaymentsTotalAmount = 0;
 
         foreach ($transactions as $transaction) {
-            // get transaction's payments
-            $transactionPaymentsTotalAmount =
+            // get transaction's remaining amount
+            // calcualte the actual due amount
+            $transactionDueAmount = $this->transactionDueAmount($transaction);
+
+            $transactionPaymentsTotalAmount = $transactionDueAmount -
             $transaction->payment->where('paid_on', '<', $endDate)->sum('amount');
 
-            $status_id =
-            $this->getTransactionStatusWithEndDate($transaction, $endDate);
+            $status_id = $this->getTransactionStatusWithEndDate($transaction, $endDate);
 
             if ($status_id == self::paid) {
                 $paidAmount += $transactionPaymentsTotalAmount;
@@ -240,5 +233,16 @@ class TransactionRepository implements TransactionRepositoryInterface
             'Due date timestamp' => $payment->paid_on,
             'Details' => $payment->details,
         ];
+    }
+
+    protected function transactionDueAmount($transaction)
+    {
+        $transactionDueAmount = $transaction->amount;
+
+        if (!$transaction->is_VAT_inclusive) {
+            $transactionDueAmount += $transaction->amount * ($transaction->VAT / 100);
+        }
+
+        return $transactionDueAmount;
     }
 }
