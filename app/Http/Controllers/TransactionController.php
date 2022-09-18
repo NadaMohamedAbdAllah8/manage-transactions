@@ -82,7 +82,7 @@ class TransactionController extends Controller
         }
     }
 
-    // show the trainsaction's payment
+    // show the transaction's payment
     public function payments($id)
     {
         try {
@@ -97,7 +97,7 @@ class TransactionController extends Controller
     }
 
     // for the given range show total sum of paid, outstanding,
-    // and overdue transcations
+    // and overdue transactions
     public function rangeReport($startingDate, $endingDate)
     {
         $validRange = $this->validateRange($startingDate, $endingDate);
@@ -114,7 +114,7 @@ class TransactionController extends Controller
     }
 
     // for each month of the given range show total sum of paid, outstanding,
-    // and overdue transcations
+    // and overdue transactions
     public function monthlyReport($startingDate, $endingDate)
     {
         $validRange = $this->validateRange($startingDate, $endingDate, 'Y-m');
