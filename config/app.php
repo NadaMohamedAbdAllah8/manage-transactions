@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         App\Providers\PaymentRepositoryServiceProvider::class,
+        Spatie\EloquentSortable\EloquentSortableServiceProvider::class,
     ],
 
     /*

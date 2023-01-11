@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-class Category extends Authenticatable
+class Category extends Authenticatable implements Sortable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+
+    use HasApiTokens, HasFactory, Notifiable, SortableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -18,7 +20,7 @@ class Category extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name'
+        'name', 'order',
     ];
 
     public function subCategories()
@@ -30,4 +32,9 @@ class Category extends Authenticatable
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public $sortable = [
+        'order_column_name' => 'order',
+        'sort_when_creating' => true,
+    ];
 }
