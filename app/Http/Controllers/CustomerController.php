@@ -82,5 +82,4 @@ class CustomerController extends Controller
     { //return 'hi';
         return $this->transactionRepository->findByCustomer(Auth::guard('customer')->user()->id);
     }
-
 }

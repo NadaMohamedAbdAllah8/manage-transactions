@@ -37,7 +37,7 @@ class SubCategoryController extends Controller
         ]);
 
         if ($validator->fails()) {
-            // get all errors 
+            // get all errors
             $errors = $validator->errors()->all();
 
             return response()->json([

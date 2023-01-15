@@ -11,8 +11,10 @@ use Spatie\EloquentSortable\SortableTrait;
 
 class Category extends Authenticatable implements Sortable
 {
-
-    use HasApiTokens, HasFactory, Notifiable, SortableTrait;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use SortableTrait;
 
     /**
      * The attributes that are mass assignable.

@@ -154,5 +154,4 @@ class TransactionController extends Controller
 
         return $dateCheck && $dateCheck->format($format) === $date;
     }
-
 }

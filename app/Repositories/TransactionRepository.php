@@ -11,9 +11,9 @@ use DateTime;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
-    const paid = 1;
-    const outstanding = 2;
-    const overdue = 3;
+    public const paid = 1;
+    public const outstanding = 2;
+    public const overdue = 3;
 
     public function create($data)
     {
@@ -77,7 +77,7 @@ class TransactionRepository implements TransactionRepositoryInterface
         if ($transactionPaymentsTotalAmount >= $transactionDueAmount) {
             // the transaction is paid
             return self::paid;
-        } else if (Carbon::parse($endDate) > Carbon::parse($transaction->due_date)) {
+        } elseif (Carbon::parse($endDate) > Carbon::parse($transaction->due_date)) {
             return self::overdue;
         }
 
@@ -102,7 +102,6 @@ class TransactionRepository implements TransactionRepositoryInterface
                     return $this->formatResult($transaction);
                 }
             );
-
     }
 
     public function findPayments($id)
@@ -185,7 +184,6 @@ class TransactionRepository implements TransactionRepositoryInterface
         foreach ($periods as $period) {
             if ($period->format("Y-m-01") <=
                 $endDateTime->format("Y-m-01")) {
-
                 $monthResult = array();
 
                 $monthResult['month'] = $period->format("m");
@@ -193,8 +191,10 @@ class TransactionRepository implements TransactionRepositoryInterface
                 $monthResult['year'] = $period->format("Y");
 
                 $monthTransactionsAmounts =
-                $this->whereBetweenDates($period->format("Y-m-01"),
-                    $period->modify('+1 month')->format("Y-m-01"));
+                $this->whereBetweenDates(
+                    $period->format("Y-m-01"),
+                    $period->modify('+1 month')->format("Y-m-01")
+                );
 
                 $monthResult['paid'] = $monthTransactionsAmounts['paid'];
 
